@@ -1,0 +1,16 @@
+body {
+	width: 800px;
+	margin-right: auto;
+	margin-left: auto;
+
+	font-family:  Arial, Verdana, sans-serif;
+}
+
+p {
+	line-height: 150%;
+	text-align: justify;
+}
+em {
+	font-weight: bold;
+	color: #009d91;
+}
