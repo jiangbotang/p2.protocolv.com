@@ -8,7 +8,7 @@
 				you friends. You can also follow your friends and check their posts and status upgrade.
 			</p>
 			<p>
-				Please sign up and get started!
+				Please sign up to get started!
 			</p>
 			<input type='submit' value='Sign up'>
 		</form>
@@ -16,7 +16,7 @@
 
 	<!-- the login part of the view -->
 	<div id="login">
-		<form method='POST' action='/users/p_login'>
+		<form name='myForm' method='POST' action='/users/p_login' onsubmit="return validateForm();">
 
 			Email<br>
 			<input type='text' name='email'>

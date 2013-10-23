@@ -11,6 +11,10 @@ class users_controller extends base_controller {
 		$this->template->content = View::instance('v_users_signup');
 		$this->template->title = "Sign Up";
 
+		#include Javascript files in the template view
+		$this->template->client_files_body = '<script type="text/javascript" src="/js/val_methods.js"></script>';
+		$this->template->client_files_body .= '<script type="text/javascript" src="/js/users_signup_val.js"></script>';
+
 		#Render template
 		echo $this->template;
 	}
@@ -44,6 +48,10 @@ class users_controller extends base_controller {
 			$this->template->content = View::instance('v_users_login');
 			$this->template->title = "Login";
 
+			$this->template->client_files_head = '<link rel="stylesheet" href="/css/login.css" type="text/css">';
+
+			$this->template->client_files_body = '<script type="text/javascript" src="/js/users_login_val.js"></script>';
+
 		#Render template
 			echo $this->template;
 		
@@ -70,7 +78,7 @@ class users_controller extends base_controller {
 			if(!$token) {
 
 				#Send them back to the login page
-				Router::redirect("/users/login/");
+				Router::redirect("/users/login");
 
 		#But if we did, login succeed!
 			} else {

@@ -1,4 +1,4 @@
-<form method='POST' action='/users/p_signup'>
+<form name='myForm' method='POST' action='/users/p_signup' onsubmit="return validateForm()">
 
 	First Name<br>
 	<input type='text' name='first_name'>
@@ -17,6 +17,5 @@
 	<br><br>
 
 	<input type='submit'>
-
 
 </form>

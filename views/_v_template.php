@@ -18,6 +18,20 @@
 		<img src="../resource/img/logo.jpg">
 	</div>
 
+	<!-- display the menu if user is logged in-->
+	<?php if($user): ?>
+		<div id="menu">
+			<!-- bring user back to posts page -->
+			<a href='/posts/listPost'>Home</a>
+
+			<a href='/users/logout'>Logout</a>
+			<a href='/users/profile'>Profile</a>
+			<a href='/posts/listPost'>Posts</a>
+			<a href='/follow/follow'>Follow</a>
+		</div>
+	<?php endif; ?>
+
+
 	<?php if(isset($content)) echo $content; ?>
 
 	<?php if(isset($client_files_body)) echo $client_files_body; ?>

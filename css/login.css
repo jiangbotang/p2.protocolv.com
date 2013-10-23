@@ -1,0 +1,13 @@
+#content_sl {
+	height: 300px;
+}
+#signup {
+	width: 350px;
+	float: left;
+}
+
+#login {
+	width: 375px;
+	float: right;
+	margin-top: 55px;
+}
