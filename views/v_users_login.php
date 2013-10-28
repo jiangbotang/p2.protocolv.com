@@ -24,7 +24,10 @@
 
 			Password<br>
 			<input type='password' name='password'>
-			<br><br>
+			<br>
+
+			<?php if(isset($errorMessage)) echo $errorMessage; ?>
+			<br>
 
 			<input type='submit' value='Log in'>
 		</form>

@@ -6,7 +6,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 	<!-- master css -->
-	<link type="text/css" rel="stylesheet" href="../css/master.css">				
+	<link type="text/css" rel="stylesheet" href="/css/master.css">				
 	<!-- Controller Specific JS/CSS -->
 	<?php if(isset($client_files_head)) echo $client_files_head; ?>
 	
@@ -15,18 +15,18 @@
 <body>
 	<!-- header -->
 	<div id="header">
-		<img src="../resource/img/logo.jpg">
+		<img src="/resource/img/logo.jpg">
 	</div>
 
 	<!-- display the menu if user is logged in-->
 	<?php if($user): ?>
 		<div id="menu">
 			<!-- bring user back to posts page -->
-			<a href='/posts/listPost'>Home</a>
+			<a href='/posts/index'>Home</a>
 
 			<a href='/users/logout'>Logout</a>
 			<a href='/users/profile'>Profile</a>
-			<a href='/posts/listPost'>Posts</a>
+			<a href='/posts/index'>Posts</a>
 			<a href='/follow/follow'>Follow</a>
 		</div>
 	<?php endif; ?>

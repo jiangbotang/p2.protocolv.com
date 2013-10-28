@@ -5,10 +5,14 @@ class users_controller extends base_controller {
 		parent::__construct();
 	}
 
-	public function signup() {
+	public function signup($error = null) {
 
 		#Setup view
 		$this->template->content = View::instance('v_users_signup');
+		# Pass an error message to the view if the method is called with an error parameter
+		if ($error == "emailExistError") {
+			$this->template->content->emailExistError="There is already a user associated with the email you entered.";
+		}
 		$this->template->title = "Sign Up";
 
 		#include Javascript files in the template view
@@ -21,42 +25,59 @@ class users_controller extends base_controller {
 
 	public function p_signup() {
 
-		# More data we want to store with the user
-		$_POST['created'] = Time::now();
-		$_POST['modified'] = Time::now();
+		#check if signup eamil already exits in database
+		$_POST = DB::instance(DB_NAME)->sanitize($_POST);
+		$q = "SELECT user_id
+				FROM users
+				WHERE email='".$_POST['email']."'
+				";
+		$user_id = DB::instance(DB_NAME)->select_field($q);
 
-		# Encrypt the password
-		$_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);
+		# email has not been used, allow signup
+		if(!$user_id) {
+			# More data we want to store with the user
+			$_POST['created'] = Time::now();
+			$_POST['modified'] = Time::now();
 
-		# Create an encrypted token via their email address and a random string
-		$_POST['token'] = sha1(TOKEN_SALT.$_POST['email'].Utils::generate_random_string());
+			# Encrypt the password
+			$_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);
 
-		#Insert this user into the database
-		$user_id = DB::instance(DB_NAME)->insert('users', $_POST);
+			# Create an encrypted token via their email address and a random string
+			$_POST['token'] = sha1(TOKEN_SALT.$_POST['email'].Utils::generate_random_string());
 
-		# Confirm the sign up and provide a link to go back to the log in page
-		$this->template->content = View::instance('v_users_p_signup');
-		$this->template->content->email = $_POST['email'];
-		$this->template->title = "Sign Up";
-		echo $this->template;
+			#Insert this user into the database
+			$user_id = DB::instance(DB_NAME)->insert('users', $_POST);
+
+			# Confirm the sign up and provide a link to go back to the log in page
+			$this->template->content = View::instance('v_users_p_signup');
+			$this->template->content->email = $_POST['email'];
+			$this->template->title = "Sign Up";
+			echo $this->template;
+
+		# email has been signed up, redirect to signup page with error message
+		} else {
+			Router::redirect("/users/signup/emailExistError");
+		}
 	}
 
 	public function index() {
-		echo "This is the index page";
+		Router::redirect("/users/login");
 	}
 
-	public function login() {
+	public function login($error = null) {
 		#Setup up the view
-			$this->template->content = View::instance('v_users_login');
-			$this->template->title = "Login";
+		$this->template->content = View::instance('v_users_login');
+		# Pass an error message to the view if the method is called with an error parameter
+		if ($error == "error") {
+			$this->template->content->errorMessage="The email and password combination does not exist! Please try again.";
+		}
+		$this->template->title = "Login";
 
-			$this->template->client_files_head = '<link rel="stylesheet" href="/css/login.css" type="text/css">';
-
-			$this->template->client_files_body = '<script type="text/javascript" src="/js/users_login_val.js"></script>';
+		$this->template->client_files_head = '<link rel="stylesheet" href="/css/login.css" type="text/css">';
+		$this->template->client_files_body = '<script type="text/javascript" src="/js/users_login_val.js"></script>';
 
 		#Render template
-			echo $this->template;
-		
+		echo $this->template;	
 	}
 
 	public function p_login() {
@@ -79,8 +100,8 @@ class users_controller extends base_controller {
 		#If we didn't find a matching token in the database, it means login failed
 			if(!$token) {
 
-				#Send them back to the login page
-				Router::redirect("/users/login");
+				#Send them back to the login page with error parameter
+				Router::redirect("/users/login/error");
 
 		#But if we did, login succeed!
 			} else {
@@ -99,7 +120,7 @@ class users_controller extends base_controller {
 				setcookie("token", $token, strtotime('+1 year'), '/');
 
 				# Send them to the main page - or whatever you want them to go
-				Router::redirect("/");
+				Router::redirect("/posts/index");
 			}
 	}
 
@@ -119,7 +140,7 @@ class users_controller extends base_controller {
 		setcookie("token", "", strtotime('-1 year'), '/');
 
 		# Send them back to the main index
-		Router::redirect('/');
+		Router::redirect('/users/login');
 	}
 
 	public function profile($user_name = NULL) {
