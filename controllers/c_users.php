@@ -143,20 +143,45 @@ class users_controller extends base_controller {
 		Router::redirect('/users/login');
 	}
 
-	public function profile($user_name = NULL) {
+	public function profile() {
 
-		# If user is black, they're not logged in; redirect them to the login page
+		# Make sure user is logged in if they want to use anything in this controller
 		if(!$this->user) {
-			Router::redirect('/users/login');
+			die("Members only. <a href='/users/login'>Login</a>");
 		}
-
-		# If they werent' rederected away, continue:
 
 		# Setup view
 		$this->template->content = View::instance('v_users_profile');
 		$this->template->title = "Profile of ".$this->user->first_name;
 
+		# Setup client files
+		$this->template->client_files_head = '<link rel="stylesheet" href="/css/profile.css" type="text/css">';
+		$this->template->client_files_body = '<script type="text/javascript" src="/js/val_methods.js"></script>';
+		$this->template->client_files_body .= '<script type="text/javascript" src="/js/users_profile_val.js"></script>';
+
 		# Render template
 		echo $this->template;
+	}
+
+	/*
+	 * Upate user profile
+	*/
+	public function p_profile() {
+		# Sanitize user data
+		$_POST = DB::instance(DB_NAME)->sanitize($_POST);
+
+		# Modified field in the database also needs update
+		$_POST['modified'] = Time::now();
+
+		# Update database with $_POST
+		$user_id = DB::instance(DB_NAME)->update("users", $_POST, "WHERE user_id = '".$this->user->user_id."'");
+
+		# Redirect user to profile page after update
+		Router::redirect('/users/profile');
+
+	}
+
+	public function p_profile_resetPassword() {
+
 	}
 }

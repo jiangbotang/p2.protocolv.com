@@ -26,8 +26,9 @@
 
 			<a href='/users/logout'>Logout</a>
 			<a href='/users/profile'>Profile</a>
-			<a href='/posts/index'>Posts</a>
-			<a href='/follow/follow'>Follow</a>
+			<a href='/posts/index'>See Posts</a>
+			<a href='/posts/add'>New Post</a>
+			<a href='/follow/follow'>Follow a User</a>
 		</div>
 	<?php endif; ?>
 
