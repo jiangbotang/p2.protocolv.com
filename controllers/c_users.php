@@ -143,7 +143,7 @@ class users_controller extends base_controller {
 		Router::redirect('/users/login');
 	}
 
-	public function profile() {
+	public function profile($notification = null) {
 
 		# Make sure user is logged in if they want to use anything in this controller
 		if(!$this->user) {
@@ -154,6 +154,11 @@ class users_controller extends base_controller {
 		$this->template->content = View::instance('v_users_profile');
 		$this->template->title = "Profile of ".$this->user->first_name;
 
+		# Pass the notification to the view
+		if (isset($notification)) {
+			$this->template->content->notification = $notification;
+		}
+		
 		# Setup client files
 		$this->template->client_files_head = '<link rel="stylesheet" href="/css/profile.css" type="text/css">';
 		$this->template->client_files_body = '<script type="text/javascript" src="/js/val_methods.js"></script>';
@@ -167,21 +172,50 @@ class users_controller extends base_controller {
 	 * Upate user profile
 	*/
 	public function p_profile() {
-		# Sanitize user data
-		$_POST = DB::instance(DB_NAME)->sanitize($_POST);
 
-		# Modified field in the database also needs update
-		$_POST['modified'] = Time::now();
+		# Update database if there is a change, else redirect with error parameter
+		if(($_POST['first_name'] == $this->user->first_name) && ($_POST['last_name'] == $this->user->last_name)) {
+			# Redirect with a parameter "noChangeError"
+			Router::redirect('/users/profile/noChangeError');		
+		} else {
+			# Sanitize user data
+			$_POST = DB::instance(DB_NAME)->sanitize($_POST);
 
-		# Update database with $_POST
-		$user_id = DB::instance(DB_NAME)->update("users", $_POST, "WHERE user_id = '".$this->user->user_id."'");
+			# Modified field in the database also needs update
+			$_POST['modified'] = Time::now();
 
-		# Redirect user to profile page after update
-		Router::redirect('/users/profile');
+			# Update database with $_POST
+			$user_id = DB::instance(DB_NAME)->update("users", $_POST, "WHERE user_id = '".$this->user->user_id."'");
 
+			# Redirect user to profile page after update
+			Router::redirect('/users/profile');
+		}
 	}
 
 	public function p_profile_resetPassword() {
+		# Check user entered old password
+		$_POST = DB::instance(DB_NAME)->sanitize($_POST);
+		$_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);
 
+		$q = "SELECT password
+				FROM users
+				WHERE user_id = '".$this->user->user_id."'";
+		$passwordFromDB = DB::instance(DB_NAME)->select_field($q);
+
+		# If password correct, let user update with new password, otherwise redirect with error message
+		if ($_POST['password'] == $passwordFromDB) {
+			# Transform new password
+			$_POST['newPassword'] = sha1(PASSWORD_SALT.$_POST['newPassword']);
+			# Info to be updated
+			$data = Array("password" => $_POST['newPassword'],
+						  "modified" => Time::now());
+			# Update databse
+			$user_id = DB::instance(DB_NAME)->update("users", $data, "WHERE user_id = '".$this->user->user_id."'");
+
+			# Redirect with notification
+			Router::redirect('/users/profile/passwordUpdateSuccess');
+		} else {
+			Router::redirect('/users/profile/wrongPasswordError');
+		}
 	}
 }

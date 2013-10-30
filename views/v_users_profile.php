@@ -1,4 +1,25 @@
 <h2>Welcome, <?php echo $user->first_name; ?> <?php echo $user->last_name; ?></h2>
+
+<!-- show different notification messages -->
+<?php if(isset($notification)): ?>
+	<?php switch($notification):
+		case "noChangeError": ?>
+		<em>You haven't made any change to your profile!</em>
+		<br><br>
+		<?php break; ?>
+
+		<?php case "wrongPasswordError": ?>
+		<em>Please enter correct current password!</em>
+		<br><br>
+		<?php break; ?>
+
+		<?php case "passwordUpdateSuccess": ?>
+		<em>You password has been updated!</em>
+		<br><br>
+		<?php break; ?>
+	<?php endswitch; ?>
+<?php endif; ?>
+
 <div id="profile">
 	<div id="profileUpdate">
 		<form name='profileUpdate' method='POST' action='/users/p_profile' onsubmit="return validateProfile()">
@@ -23,7 +44,7 @@
 
 	<div id="passwordUpdate">
 		<form name='passwordUpdate' method='POST' action='/users/p_profile_resetPassword' onsubmit="return validatePassword()">
-			<label for="password"><small>Your Old Password</small></label>
+			<label for="password"><small>Your Current Password</small></label>
 			<br>
 			<input type="password" name="password" placeholder="Your old password">
 
