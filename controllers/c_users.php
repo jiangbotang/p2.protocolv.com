@@ -61,7 +61,7 @@ class users_controller extends base_controller {
 	}
 
 	public function index() {
-		Router::redirect("/users/login");
+		Router::redirect("/");
 	}
 
 	public function login($error = null) {
@@ -120,7 +120,7 @@ class users_controller extends base_controller {
 				setcookie("token", $token, strtotime('+1 year'), '/');
 
 				# Send them to the main page - or whatever you want them to go
-				Router::redirect("/posts/index");
+				Router::redirect("/");
 			}
 	}
 
@@ -140,7 +140,7 @@ class users_controller extends base_controller {
 		setcookie("token", "", strtotime('-1 year'), '/');
 
 		# Send them back to the main index
-		Router::redirect('/users/login');
+		Router::redirect('/');
 	}
 
 	public function profile($notification = null) {

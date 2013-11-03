@@ -2,8 +2,8 @@ body {
 	width: 800px;
 	margin-right: auto;
 	margin-left: auto;
-
-	font-family:  Arial, Verdana, sans-serif;
+	padding-bottom: 40px;
+	font-family:  "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 p {
@@ -13,5 +13,84 @@ p {
 em {
 	font-weight: bold;
 	color: #009d91;
+}
+
+a {
+	text-decoration: none;
+}
+
+button {
+	width: 80px;
+	height: 30px;
+	margin: 0 10px 0 0;
+}
+
+#footer {
+	position: fixed;
+	bottom: 0px;
+	height: 40px;
+	width: 800px;
+	margin-right: auto;
+	margin-left: auto;
+	background-color: #ADD8E6;
+}
+
+#footer p {
+	line-height: 100%;
+	margin-bottom: 10px;
+}
+
+
+.navigation {
+	background: url('/resource/img/navigation.png') top left repeat-x;
+	height: 134px;
+	overflow: auto;
+	display: block;
+	float: left;
+	width: 100%;
+	margin-bottom: 15px; 
+}
+
+.navigation * {
+	padding: 0;
+	margin: 0;
+	font-size: 13px;
+	text-transform: uppercase;
+}
+
+.navigation ul {
+	display: block;
+	float: left;
+	padding: 10px 0 0 0;
+	margin: 37px 0 0 20px;
+}
+
+.navigation ul li {
+	list-style: none;
+	float: left;
+	margin: 0 0 0 5px;
+}
+
+.navigation ul li a {
+	background: url('/resource/img/nav_right.png') top right no-repeat;
+	display: block;
+	padding: 0 13px 0 0;
+	color: #578ba0;
+	text-decoration: none;
+}
+
+.navigation ul li:hover a, .navigation ul li:active a {
+	background: url('/resource/img/nav_selected_right.png') top right no-repeat;
+	color: #578ba0;
+}
+
+.navigation ul li a span {
+	background: url('/resource/img/nav_left.png') top left no-repeat;
+	display: block;
+	padding: 15px 10px 10px 23px;
+}
+
+.navigation ul li:hover a span, .navigation ul li:active a span {
+	background: url('/resource/img/nav_selected_left.png') top left no-repeat;
 }
 

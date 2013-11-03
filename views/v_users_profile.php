@@ -38,7 +38,7 @@
 			<input type="text" name="email" placeholder="Your Email Address" value="<?php echo $user->email; ?>" disabled>
 
 			<br><br>
-			<button type="submit">Update My Profile</button>
+			<input type="submit" value="Update My Profile">
 		</form>
 	</div>
 
@@ -59,7 +59,7 @@
 			<input type="password" name="newPasswordCheck" placeholder="Your new password">
 
 			<br><br>
-			<button type="submit">Update My Password</button>
+			<input type="submit" value="Update My Password">
 		<form>
 	</div>
 </div>
