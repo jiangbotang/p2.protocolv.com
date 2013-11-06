@@ -3,16 +3,15 @@
 <?php foreach($users as $user): ?>
 
 	<!-- Print this user's name -->
-	<em><?=$user['first_name']?> <?=$user['last_name']?></em>
-	<br>
+	<h3><?=$user['first_name']?> <?=$user['last_name']?></h3>
 
 	<!-- If there exists a connection with this user, show a unfollow link -->
 	<?php if(isset($connections[$user['user_id']])): ?>
-		<button><a href="/posts/unfollow/<?=$user['user_id'] ?>">unfollow</a></button>
+		<a class='btn' href="/posts/unfollow/<?=$user['user_id'] ?>">unfollow</a>
 
 	<!-- Otherwise, show the follow link -->
 	<?php else: ?>
-		<button><a href="/posts/follow/<?=$user['user_id'] ?>">follow</a></button>
+		<a class='btn' href="/posts/follow/<?=$user['user_id'] ?>">follow</a>
 	<?php endif; ?>
 
 	<br><br>

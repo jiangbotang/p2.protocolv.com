@@ -14,8 +14,8 @@
 	Please sign up to get started.
 </p>
 <br><br>
-<a href='/users/login'><button><em>log in</em></button></a>
-<a href='/users/signup'><button><em>sign up</em></button></a>
+<a class='btn' href='/users/login'>log in</a>
+<a class='btn' href='/users/signup'>sign up</a>
 
 <br><br>
 <h4>+1 features:</h4>

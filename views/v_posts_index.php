@@ -1,4 +1,4 @@
-<em>Reminder: you need to <a href='/posts/users'>follow a person</a> before you can review their posts!</em>
+<em>Reminder: you need to <a href='/posts/users'>follow someone</a> before you can review their posts!</em>
 
 <!-- Start showing posts one by one -->
 <?php foreach($posts as $post): ?>
@@ -15,7 +15,8 @@
 <!-- If the owner of the post, provide the option to delete it -->
 <?php if($post['post_user_id'] == $user->user_id): ?>
 <!-- Send the post_id to the delete method -->
-<button><a href='/posts/delete/"<?=$post['post_id']?>"'>DELETE</a></button>
+<br>
+<a class='btn' href='/posts/delete/"<?=$post['post_id']?>"'>DELETE</a>
 <?php endif ?>
 
 <?php endforeach; ?>
