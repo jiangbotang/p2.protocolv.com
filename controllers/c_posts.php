@@ -4,12 +4,19 @@ class posts_controller extends base_controller {
 	public function __construct() {
 		parent::__construct();
 
-		# Make sure user is logged in if they want to use anything in this controller
+		/*
+		 * Make sure user is logged in if they want to use anything in this controller
+		 * Since very method in the posts controller are members only,
+		 * put the log in check in the constructor
+		 */
 		if(!$this->user) {
 			die("Members only. <a href='/users/login'>Login</a>");
 		}
 	}
 
+	/*
+	 * place to add a new post
+	 */
 	public function add($notification = null) {
 
 		# Setup view
@@ -30,6 +37,9 @@ class posts_controller extends base_controller {
 		echo $this->template;
 	}
 
+	/*
+	 * process the request to add a post
+	 */
 	public function p_add() {
 
 		# Associate this post with this user
@@ -48,7 +58,26 @@ class posts_controller extends base_controller {
 		Router::redirect('/posts/add/success');
 	}
 
+	/*
+	 * Process deleting a post
+	 */	
 	public function delete($post_id) {
+		/*
+		 * IMPORTANT: to prevent a user deleting other user's post by
+		 * sending "domain/posts/delete/post_id"
+		 * MUST check logged in user's user_id is the same as the 
+		 * user_id associated with the post_id
+		 */
+		$q = 'SELECT
+				posts.user_id
+			FROM posts
+			WHERE posts.post_id = '.$post_id;
+
+		$post_user_id = DB::instance(DB_NAME)->select_field($q);
+		if ($post_user_id != $this->user->user_id) {
+			die("You don't have delete access to the post!");
+		}
+
 		# Delete this post
 		$where_condition = "WHERE post_id = $post_id";
 		DB::instance(DB_NAME)->delete('posts', $where_condition);
@@ -57,6 +86,10 @@ class posts_controller extends base_controller {
 		Router::redirect('/posts/index');
 	}
 
+	/*
+	 * Display all the posts from the users you are following.
+	 * It can be improved to always display posts of the logged in user
+	 */		
 	public function index() {
 
 		# Setup the View
@@ -89,6 +122,9 @@ class posts_controller extends base_controller {
 		echo $this->template;
 	}
 
+	/*
+	 * Where you can follow / unfollow all the users
+	 */	
 	public function users() {
 
 		# Setup the View
@@ -126,6 +162,9 @@ class posts_controller extends base_controller {
 		echo $this->template;
 	}
 
+	/*
+	 * Process the request of followign a user
+	 */	
 	public function follow($user_id_followed) {
 
 		# Prepare the data array to be inserted
@@ -142,6 +181,9 @@ class posts_controller extends base_controller {
 		Router::redirect('/posts/users');
 	}
 
+	/*
+	 * Process the request of unfollowign a user
+	 */	
 	public function unfollow($user_id_followed) {
 
 		# Delete this connection

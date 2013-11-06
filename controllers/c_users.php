@@ -5,15 +5,19 @@ class users_controller extends base_controller {
 		parent::__construct();
 	}
 
+	/*
+	 * Place to sign up
+	 */
 	public function signup($error = null) {
 
 		#Setup view
 		$this->template->content = View::instance('v_users_signup');
+			$this->template->title = "Sign Up";
+
 		# Pass an error message to the view if the method is called with an error parameter
 		if ($error == "emailExistError") {
 			$this->template->content->emailExistError="There is already a user associated with the email you entered.";
 		}
-		$this->template->title = "Sign Up";
 
 		#include Javascript files in the template view
 		$this->template->client_files_body = '<script type="text/javascript" src="/js/val_methods.js"></script>';
@@ -23,6 +27,9 @@ class users_controller extends base_controller {
 		echo $this->template;
 	}
 
+	/*
+	 * Process the sign up request
+	 */
 	public function p_signup() {
 
 		#check if signup eamil already exits in database
@@ -60,18 +67,25 @@ class users_controller extends base_controller {
 		}
 	}
 
+	/*
+	 * Shows up the v_index_index view as homepage
+	 */
 	public function index() {
 		Router::redirect("/");
 	}
 
+	/*
+	 * Place to log in
+	 */
 	public function login($error = null) {
 		#Setup up the view
 		$this->template->content = View::instance('v_users_login');
+		$this->template->title = "Login";
+
 		# Pass an error message to the view if the method is called with an error parameter
 		if ($error == "error") {
 			$this->template->content->errorMessage="The email and password combination does not exist! Please try again.";
 		}
-		$this->template->title = "Login";
 
 		$this->template->client_files_head = '<link rel="stylesheet" href="/css/login.css" type="text/css">';
 		$this->template->client_files_body = '<script type="text/javascript" src="/js/users_login_val.js"></script>';
@@ -80,6 +94,9 @@ class users_controller extends base_controller {
 		echo $this->template;	
 	}
 
+	/*
+	 * Process a log in request
+	 */
 	public function p_login() {
 		#Sanitize the user entered data to prevent any funny-business
 			$_POST = DB::instance(DB_NAME)->sanitize($_POST);
@@ -143,12 +160,13 @@ class users_controller extends base_controller {
 		Router::redirect('/');
 	}
 
+	/*
+	 * Place to view / edit profile, reset password
+	 */
 	public function profile($notification = null) {
 
-		# Make sure user is logged in if they want to use anything in this controller
-		if(!$this->user) {
-			die("Members only. <a href='/users/login'>Login</a>");
-		}
+		# Make sure user is logged in
+		$this->loginCheck();
 
 		# Setup view
 		$this->template->content = View::instance('v_users_profile');
@@ -169,9 +187,12 @@ class users_controller extends base_controller {
 	}
 
 	/*
-	 * Upate user profile
-	*/
+	 * process uder profile update request
+	 */
 	public function p_profile() {
+
+		# Make sure user is logged in
+		$this->loginCheck();
 
 		# Update database if there is a change, else redirect with error parameter
 		if(($_POST['first_name'] == $this->user->first_name) && ($_POST['last_name'] == $this->user->last_name)) {
@@ -192,7 +213,14 @@ class users_controller extends base_controller {
 		}
 	}
 
+	/*
+	 * process password resetting request
+	 */
 	public function p_profile_resetPassword() {
+
+		# Make sure user is logged in
+		$this->loginCheck();
+
 		# Check user entered old password
 		$_POST = DB::instance(DB_NAME)->sanitize($_POST);
 		$_POST['password'] = sha1(PASSWORD_SALT.$_POST['password']);
@@ -217,5 +245,15 @@ class users_controller extends base_controller {
 		} else {
 			Router::redirect('/users/profile/wrongPasswordError');
 		}
+	}
+
+	/*
+	 * Check if an user is logged in.
+	 */
+	public function loginCheck() {
+		if(!$this->user) {
+			die("Members only. <a href='/users/login'>Login</a>");
+		}
+
 	}
 }

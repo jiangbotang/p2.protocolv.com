@@ -1,6 +1,7 @@
 <!-- View of the index page -->
 <h2>Welcome to <?=APP_NAME?></h2>
 
+<!-- Display if logged in -->
 <?php if($user): ?>
 	<h2>You are logged in as <em><?=$user->first_name?> <?=$user->last_name?> !</em></h2>
 <?php endif; ?>
