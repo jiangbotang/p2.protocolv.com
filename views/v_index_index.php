@@ -1,3 +1,4 @@
+<!-- View of the index page -->
 <h2>Welcome to <?=APP_NAME?></h2>
 
 <?php if($user): ?>
@@ -13,8 +14,8 @@
 	Please sign up to get started.
 </p>
 <br><br>
-<button><a href='/users/login'><em>log in</em></a></button>
-<button><a href='/users/signup'><em>sign up</em></a></button>
+<a href='/users/login'><button><em>log in</em></button></a>
+<a href='/users/signup'><button><em>sign up</em></button></a>
 
 <br><br>
 <h4>+1 features:</h4>

@@ -15,7 +15,7 @@
 <body>
 	<!-- header -->
 	<div id="header">
-		<img src="/resource/img/logo.jpg">
+		<img src="/resource/img/logo.jpg" alt='site logo'>
 	</div>
 
 	<!-- display the navigation bar if user is logged in
